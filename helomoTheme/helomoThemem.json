@@ -1,0 +1,44 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "final_space": true,
+  "version": 3,
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "path",
+          "style": "powerline",
+          "powerline_symbol": "\uE0B0",
+          "foreground": "#ffffff",
+          "background": "#61AFEF",
+          "properties": {
+            "style": "folder"
+          }
+        },
+        {
+          "type": "script",
+          "style": "powerline",
+          "powerline_symbol": "\uE0B0",
+          "foreground": "#ffffff",
+          "background": "#C678DD",
+          "properties": {
+            "script": "cpu_usage=$(top -bn1 | grep 'Cpu(s)' | awk '{print $2 + $4}') && echo \"CPU: ${cpu_usage}%\""
+          }
+        },
+        {
+          "type": "script",
+          "style": "powerline",
+          "powerline_symbol": "\uE0B0",
+          "foreground": "#ffffff",
+          "background": "#98C379",
+          "properties": {
+            "script": "gpu_usage=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null | awk '{print $1}') && echo \"GPU: ${gpu_usage}%\""
+          }
+        }
+      ]
+    }
+  ]
+}
+
