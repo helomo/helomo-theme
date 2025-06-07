@@ -16,4 +16,4 @@ export PATH="$PATH:/home/helomo/.local/bin"
 export WLR_NO_HARDWARE_CURSORS=1
 
 neofetch
-eval "$(oh-my-posh init bash)"
+eval "$(oh-my-posh init bash --config /home/helomo/helomoTheme/helomoTheme.json)"
