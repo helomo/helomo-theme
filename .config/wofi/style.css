@@ -1,0 +1,30 @@
+window {
+    background-color: rgba(31, 16, 53, 0.397);
+    border-radius: 12px;
+    padding: 10px;
+}
+
+#input {
+    font-size: 16px;
+    color: white;
+    background-color: rgba(72, 59, 92, 0.39);
+    border-radius: 6px;
+    padding: 5px;
+}
+
+
+#input:focus {
+    border: 2px solid #897cd1; /* change corner color on focus */
+    box-shadow: 0 0 5px 2px #3d2b70;
+}
+
+#entry {
+    padding: 10px;
+    font-size: 14px;
+    color: #eee;
+}
+
+#entry:selected {
+    background-color: #835eac;
+    color: white;
+}

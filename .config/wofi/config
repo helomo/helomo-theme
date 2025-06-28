@@ -1,0 +1,10 @@
+# ~/.config/wofi/config
+
+prompt=Run:
+width=400
+height=300
+location=center
+show=drun
+allow_images=true
+insensitive=true
+term=kitty
