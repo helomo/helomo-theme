@@ -12,3 +12,7 @@ export WLR_RENDERER=vulkan
 export XDG_SESSION_TYPE=wayland
 
 if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then hyprland; fi 
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

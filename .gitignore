@@ -1,0 +1,9 @@
+# Editor / config backups
+*.bak
+*.save
+*.save.*
+*.swp
+*~
+
+# OS / misc cruft
+.DS_Store

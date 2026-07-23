@@ -17,3 +17,5 @@ export WLR_NO_HARDWARE_CURSORS=1
 
 neofetch
 eval "$(oh-my-posh init bash --config /home/helomo/helomoTheme/helomoTheme.json)"
+
+alias claude-mem='/home/helomo/.bun/bin/bun "/home/helomo/.claude/plugins/cache/thedotmack/claude-mem/12.3.8/scripts/worker-service.cjs"'
