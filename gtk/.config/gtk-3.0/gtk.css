@@ -1,67 +1,362 @@
 /*
  * Kazuha Dusk — GTK3
  *
- * Adwaita-dark supplies the widget geometry; these overrides bend its palette
- * toward the theme and add transparency at alpha 0.78 — the same level as
- * kitty's background_opacity — so GTK windows read at the same depth as a
- * terminal and get Hyprland's blur behind them.
+ * Every value here is a literal. That is deliberate: GTK3's Adwaita *exports*
+ * @theme_bg_color, @theme_base_color, @borders and friends for third-party
+ * apps, but it was SCSS-compiled to literal values and never reads them back
+ * (verified: 0 internal references for all of them except @theme_text_color).
+ * Overriding those names does nothing — it silently leaves stock grey widgets
+ * inside a themed window, which is exactly how the file chooser broke. Do not
+ * reintroduce an @define-color palette here.
  *
- * Only backgrounds carry alpha; text and icons stay opaque. Popovers, menus and
- * tooltips stay near-opaque because they float above an already-translucent
- * window, and two stacked translucent layers over this wallpaper is unreadable.
+ * GTK4/libadwaita is the opposite and genuinely honours its named colors, which
+ * is why gtk-4.0/gtk.css is written the other way round.
+ *
+ * Transparency: ordinary windows carry alpha 0.78 — the same level as kitty's
+ * background_opacity — so GTK windows read at the same depth as a terminal and
+ * get Hyprland's blur behind them. File choosers, dialogs and popovers are
+ * opaque: they are transient and text-dense, and they float above an already
+ * translucent surface, where a second translucent layer over the wallpaper is
+ * unreadable.
  */
 
-@define-color theme_selected_bg_color #d6b8c8;
-@define-color theme_selected_fg_color #141b28;
-
-@define-color theme_bg_color          rgba(20, 27, 40, 0.78);
-@define-color theme_fg_color          #d6d2e0;
-
-@define-color theme_base_color        rgba(29, 39, 57, 0.78);
-@define-color theme_text_color        #d6d2e0;
-
-@define-color insensitive_bg_color    rgba(29, 39, 57, 0.78);
-@define-color insensitive_fg_color    #7e8190;
-
-@define-color borders                 rgba(214, 184, 200, 0.32);
-@define-color unfocused_borders       rgba(214, 184, 200, 0.32);
-
-@define-color warning_color           #e0b088;
-@define-color error_color             #e08a94;
-@define-color success_color           #8fb3ac;
-
-/* Adwaita paints its own opaque window background, which would sit on top of
-   the named color above — override it directly. */
+/* --- ordinary windows: translucent, blurred by Hyprland --- */
 window,
 window.background,
-.background,
-dialog {
+.background {
     background-color: rgba(20, 27, 40, 0.78);
+    color: #d6d2e0;
+}
+
+/* --- transient, text-dense surfaces: opaque --- */
+filechooser,
+filechooser .background,
+dialog,
+dialog.background,
+messagedialog,
+messagedialog.background {
+    background-color: #141b28;
+    color: #d6d2e0;
 }
 
 headerbar,
 .titlebar {
-    background-color: rgba(29, 39, 57, 0.78);
+    background-color: #1d2739;
+    color: #d6d2e0;
     border-bottom: 1px solid rgba(214, 184, 200, 0.32);
 }
 
-/* let the window show through the scrolling areas instead of a second slab */
-treeview.view,
-textview,
-textview text,
-scrolledwindow,
-viewport,
-notebook,
-stack {
-    background-color: transparent;
+headerbar .title,
+.titlebar .title {
+    color: #d6d2e0;
 }
 
-/* floating layers stay readable */
+headerbar .subtitle,
+.titlebar .subtitle {
+    color: #7e8190;
+}
+
+/* --- places sidebar (Recent / Home / Downloads …) ---
+   Nested as placessidebar > scrolledwindow > viewport > list, so it needs its
+   own background: a blanket `transparent` on scrolledwindow dissolves it into
+   the window and the pane disappears. */
+placessidebar,
+placessidebar list,
+placessidebar viewport,
+placessidebar scrolledwindow {
+    background-color: #1d2739;
+    color: #d6d2e0;
+}
+
+placessidebar row {
+    background-color: transparent;
+    color: #d6d2e0;
+}
+
+placessidebar row:hover {
+    background-color: rgba(214, 184, 200, 0.12);
+}
+
+placessidebar row:selected,
+placessidebar row:selected:focus {
+    background-color: #d6b8c8;
+    color: #141b28;
+}
+
+placessidebar row:selected image,
+placessidebar row:selected label {
+    color: #141b28;
+}
+
+placessidebar row image {
+    color: #7e8190;
+}
+
+/* --- file list --- */
+treeview.view {
+    background-color: #1d2739;
+    color: #d6d2e0;
+    border-left-color: rgba(214, 184, 200, 0.32);
+    border-top-color: rgba(214, 184, 200, 0.32);
+}
+
+treeview.view:hover {
+    background-color: rgba(214, 184, 200, 0.10);
+}
+
+treeview.view:selected,
+treeview.view:selected:focus {
+    background-color: #d6b8c8;
+    color: #141b28;
+}
+
+treeview.view:disabled {
+    color: #7e8190;
+}
+
+/* column headers: Name / Size / Type / Modified */
+treeview.view header button {
+    background-color: #141b28;
+    color: #7e8190;
+    border-color: rgba(214, 184, 200, 0.32);
+    border-radius: 0;
+}
+
+treeview.view header button:hover {
+    background-color: #1d2739;
+    color: #d6d2e0;
+}
+
+/* Adwaita hardcodes `.view { background-color: #2d2d2d }` — a grey unrelated to
+   this palette. Styling only `treeview.view` leaves that grey on two bare-.view
+   containers: the pathbar strip (#pathbarbox.view) and the GtkStack behind the
+   file list. That is why the upper bar and the empty space under the rows came
+   out grey while everything else was navy. Verified by dumping the live
+   GtkFileChooserWidget node tree: both reported bg=rgb(45,45,45).
+   More specific rules below/above (treeview.view, textview.view) still win. */
+.view,
+#pathbarbox,
+#pathbarbox.view {
+    background-color: #1d2739;
+    color: #d6d2e0;
+}
+
+/* --- generic lists (sidebar-less choosers, preference rows) --- */
+list,
+list row {
+    background-color: transparent;
+    color: #d6d2e0;
+}
+
+list row:hover {
+    background-color: rgba(214, 184, 200, 0.10);
+}
+
+list row:selected {
+    background-color: #d6b8c8;
+    color: #141b28;
+}
+
+/* --- path bar breadcrumb (helomo / Downloads) --- */
+.path-bar button,
+.path-bar-box button {
+    background-color: transparent;
+    background-image: none;
+    color: #7e8190;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.path-bar button:hover,
+.path-bar-box button:hover {
+    background-color: rgba(214, 184, 200, 0.12);
+    color: #d6d2e0;
+}
+
+.path-bar button:checked,
+.path-bar button:active,
+.path-bar-box button:checked {
+    background-color: rgba(214, 184, 200, 0.20);
+    color: #d6d2e0;
+}
+
+/* --- buttons --- */
+button {
+    background-color: #1d2739;
+    background-image: none;
+    color: #d6d2e0;
+    border: 1px solid rgba(214, 184, 200, 0.32);
+    text-shadow: none;
+}
+
+button:hover {
+    background-color: #26314a;
+    color: #f0e6ec;
+}
+
+button:active,
+button:checked {
+    background-color: #d6b8c8;
+    color: #141b28;
+    border-color: #d6b8c8;
+}
+
+button:disabled {
+    background-color: #1d2739;
+    color: #7e8190;
+    border-color: rgba(214, 184, 200, 0.16);
+}
+
+button.suggested-action {
+    background-color: #d6b8c8;
+    color: #141b28;
+    border-color: #d6b8c8;
+}
+
+button.suggested-action:hover {
+    background-color: #e3b5cc;
+}
+
+button.destructive-action {
+    background-color: #e08a94;
+    color: #141b28;
+    border-color: #e08a94;
+}
+
+button.flat {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+/* --- entries --- */
+entry,
+entry.flat {
+    background-color: #141b28;
+    background-image: none;
+    color: #d6d2e0;
+    border: 1px solid rgba(214, 184, 200, 0.32);
+    caret-color: #d6b8c8;
+}
+
+entry:focus,
+entry:focus-within {
+    border-color: #d6b8c8;
+    box-shadow: none;
+}
+
+entry selection {
+    background-color: #d6b8c8;
+    color: #141b28;
+}
+
+entry:disabled {
+    color: #7e8190;
+}
+
+/* --- file-type filter dropdown ("All supported files") --- */
+combobox button,
+combobox .linked button {
+    background-color: #1d2739;
+    color: #d6d2e0;
+    border: 1px solid rgba(214, 184, 200, 0.32);
+}
+
+combobox button:hover {
+    background-color: #26314a;
+}
+
+/* --- scrollbars --- */
+scrollbar {
+    background-color: #141b28;
+    border-color: rgba(214, 184, 200, 0.32);
+}
+
+scrollbar slider {
+    background-color: rgba(214, 184, 200, 0.32);
+    border: none;
+}
+
+scrollbar slider:hover {
+    background-color: rgba(214, 184, 200, 0.52);
+}
+
+scrollbar slider:active {
+    background-color: #d6b8c8;
+}
+
+/* --- separators / panes --- */
+paned > separator,
+separator {
+    background-color: rgba(214, 184, 200, 0.32);
+    background-image: none;
+}
+
+/* --- notebooks --- */
+notebook > header {
+    background-color: #1d2739;
+    border-color: rgba(214, 184, 200, 0.32);
+}
+
+notebook > header tab {
+    color: #7e8190;
+}
+
+notebook > header tab:checked {
+    color: #d6d2e0;
+    box-shadow: inset 0 -2px #d6b8c8;
+}
+
+/* --- floating layers: opaque, they sit above translucent windows --- */
 menu,
 .menu,
 popover,
 popover.background,
+popover > contents,
 tooltip,
 tooltip.background {
-    background-color: rgba(29, 39, 57, 0.96);
+    background-color: #1d2739;
+    color: #d6d2e0;
+    border: 1px solid rgba(214, 184, 200, 0.32);
+}
+
+menu menuitem:hover,
+.menu menuitem:hover {
+    background-color: #d6b8c8;
+    color: #141b28;
+}
+
+/* --- text views ---
+   `textview.view` is listed explicitly: GtkTextView carries the .view class, and
+   the broad .view rule above would otherwise outrank a bare `textview`. */
+textview,
+textview.view,
+textview text {
+    background-color: #141b28;
+    color: #d6d2e0;
+}
+
+textview text selection {
+    background-color: #d6b8c8;
+    color: #141b28;
+}
+
+/* --- semantic colors --- */
+.error,
+.error label {
+    color: #e08a94;
+}
+
+.warning,
+.warning label {
+    color: #e0b088;
+}
+
+.success,
+.success label {
+    color: #8fb3ac;
+}
+
+label:disabled,
+.dim-label {
+    color: #7e8190;
 }

@@ -11,9 +11,10 @@
  * which is why this is done in CSS rather than with a Hyprland opacity rule
  * (that would dim the text too).
  *
- * Popovers, menus and dialogs deliberately stay near-opaque (0.96): they float
- * *above* an already-translucent window, and stacking two translucent layers
- * over the wallpaper makes text unreadable.
+ * Popovers, menus and dialogs are fully opaque: they float *above* an already
+ * translucent window, and stacking two translucent layers over the wallpaper
+ * makes text unreadable. File choosers in particular are text-dense enough that
+ * any wallpaper showing through wrecks legibility.
  */
 
 @define-color accent_color        #d6b8c8;
@@ -40,11 +41,11 @@
 @define-color card_bg_color       rgba(29, 39, 57, 0.78);
 @define-color card_fg_color       #d6d2e0;
 
-/* --- floating layers: keep these readable --- */
-@define-color popover_bg_color    rgba(29, 39, 57, 0.96);
+/* --- floating layers: opaque --- */
+@define-color popover_bg_color    #1d2739;
 @define-color popover_fg_color    #d6d2e0;
 
-@define-color dialog_bg_color     rgba(20, 27, 40, 0.96);
+@define-color dialog_bg_color     #141b28;
 @define-color dialog_fg_color     #d6d2e0;
 
 @define-color destructive_color   #e08a94;
@@ -72,21 +73,44 @@ headerbar.titlebar {
     border-bottom: 1px solid rgba(214, 184, 200, 0.32);
 }
 
-/* text views / lists sit on the window, so let the window show through */
-listview,
-listview > row,
-.view,
+/* Text views and scroll containers let the window show through, so the blur
+   reads across the whole surface. Lists are deliberately NOT in this rule:
+   making listview/row transparent dissolves file-chooser rows and sidebars into
+   the background, which is what broke GTK3. They keep @view_bg_color instead. */
 textview,
 textview text,
 scrolledwindow {
     background-color: transparent;
 }
 
+/* …but inside a dialog or file chooser everything is opaque. */
+dialog scrolledwindow,
+dialog textview,
+dialog textview text,
+filechooser scrolledwindow,
+filechooser textview {
+    background-color: #141b28;
+}
+
+filechooser listview,
+filechooser listview > row,
+filechooser .sidebar,
+filechooser .navigation-sidebar {
+    background-color: #1d2739;
+    color: #d6d2e0;
+}
+
+filechooser listview > row:selected,
+filechooser .navigation-sidebar > row:selected {
+    background-color: #d6b8c8;
+    color: #141b28;
+}
+
 popover > contents,
 popover > arrow,
 menu,
 .menu {
-    background-color: rgba(29, 39, 57, 0.96);
+    background-color: #1d2739;
 }
 
 
