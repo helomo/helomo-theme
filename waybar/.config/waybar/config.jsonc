@@ -141,12 +141,18 @@
     },
 
     "hyprland/language": {
-        // Track the internal keyboard (always present); the us,ara toggle is global.
+        // Pinned to the internal keyboard: it is always present, so the module never
+        // goes stale when a USB keyboard is unplugged. The SUPER+SPACE bind in
+        // hyprland.conf runs `hyprctl switchxkblayout all next`, which keeps every
+        // keyboard on the same xkb group — so this device is always authoritative.
+        // (A per-device grp: toggle would only switch the keyboard that was typed on,
+        // and this module would sit on "en" forever.)
         // NOTE: format-<layout> overrides are avoided — they render as "…" on Waybar
-        // 0.15.0. {short} yields the compact iso code (en/ar), uppercased via CSS-free
-        // format below is not possible on GTK3, so we keep the lowercase code + glyph.
+        // 0.15.0. Use {shortDescription} (the xkb <shortDescription>: en/ar), NOT
+        // {short} — that is the xkb layout <name> and renders as us/ara.
         "keyboard-name": "at-translated-set-2-keyboard",
-        "format": "󰌌 {short}"
+        "format": "󰌌 {shortDescription}",
+        "on-click": "hyprctl switchxkblayout all next"
     },
 
     "idle_inhibitor": {
