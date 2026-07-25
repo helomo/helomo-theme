@@ -1,10 +1,20 @@
-# ~/.config/wofi/config
+# ~/.config/wofi/config — drun launcher (SUPER+R). Style: style.css
 
-prompt=Run:
-width=400
-height=300
-location=center
 show=drun
+prompt=Search…
+width=600
+# 8 rows fit exactly: 58px input block + 8 x 46px rows. At 400 the 8th row was
+# sliced in half against the bottom corner radius.
+height=426
+location=center
+
 allow_images=true
+image_size=28
 insensitive=true
+matching=multi-contains
+no_actions=true
+# No GTK theme is configured on this box, so without gtk_dark the entry and
+# scrollbar render in the light GTK default underneath our CSS.
+gtk_dark=true
+close_on_focus_loss=true
 term=kitty

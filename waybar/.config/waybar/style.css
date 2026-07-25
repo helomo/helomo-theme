@@ -1,19 +1,20 @@
 /*
- * helomo theme — Waybar "floating islands"
+ * Kazuha Dusk — Waybar "floating islands"
  *
- * Palette (reused from kitty / wofi / hyprland / oh-my-posh):
- *   capsule bg   #1a1322 @ ~55%   (kitty bg, wofi window)
- *   accent       #babbf1          (hyprland active border, lavender)
- *   fill/hover   #835eac          (wofi selected)
- *   glow         #c0a9ff          (wofi focus glow)
- *   blue #8caaee  pink #f4b8e4  green #a6d189  yellow #e5c890  red #e78284
- *   text #c6d0f5 / #eceff4
+ * Palette sampled from ~/helomoTheme/kazuha.jpg. Shared with kitty / wofi /
+ * swaync / hyprland / oh-my-posh; the hyprland side lives in hypr/colors.conf.
+ *   capsule bg   #141b28 @ ~55%   (deep water — kitty bg, wofi window)
+ *   accent       #d6b8c8          (dusty rose — hyprland active border)
+ *   fill/hover   #6b5a70          (plum — wofi selected)
+ *   glow         #f7c9cc          (the blush of the sun)
+ *   steel #8fa5c4  pink #e3b5cc  seafoam #8fb3ac  amber #e0b088  coral #e08a94
+ *   text #d6d2e0 / #f0e6ec   muted #7e8190
  */
 
 @keyframes blink-critical {
     to {
-        background-color: rgba(231, 130, 132, 0.85);
-        color: #1a1322;
+        background-color: rgba(224, 138, 148, 0.85);
+        color: #141b28;
     }
 }
 
@@ -29,7 +30,7 @@
 /* transparent bar → each module floats as its own island */
 window#waybar {
     background: transparent;
-    color: #c6d0f5;
+    color: #d6d2e0;
 }
 
 window#waybar.hidden {
@@ -51,17 +52,22 @@ window#waybar.hidden {
 #language,
 #idle_inhibitor,
 #tray,
+#custom-notification,
 #custom-power {
-    background-color: rgba(26, 19, 34, 0.55);
-    border: 1px solid rgba(186, 187, 241, 0.22);
+    /* 0.78, not the 0.55 the old purple theme used: kazuha.jpg's sky band is far
+       brighter than Lumin.png was, and at 0.55 the navy diluted to a flat grey
+       (measured srgb(101,96,111)) that killed both the capsule edge and the
+       contrast of the dimmer module colours. */
+    background-color: rgba(20, 27, 40, 0.78);
+    border: 1px solid rgba(214, 184, 200, 0.32);
     border-radius: 10px;
     padding: 0 12px;
     margin: 4px 3px;
-    color: #c6d0f5;
+    color: #d6d2e0;
     transition: background-color 200ms ease, box-shadow 200ms ease;
 }
 
-/* signature lavender glow on hover */
+/* signature blush glow on hover */
 #clock:hover,
 #mpris:hover,
 #cpu:hover,
@@ -73,10 +79,11 @@ window#waybar.hidden {
 #battery:hover,
 #language:hover,
 #idle_inhibitor:hover,
+#custom-notification:hover,
 #custom-power:hover {
-    background-color: rgba(131, 94, 172, 0.5);
-    box-shadow: 0 0 6px 1px rgba(192, 169, 255, 0.6);
-    color: #eceff4;
+    background-color: rgba(107, 90, 112, 0.5);
+    box-shadow: 0 0 6px 1px rgba(247, 201, 204, 0.6);
+    color: #f0e6ec;
 }
 
 /* ---- workspaces ---- */
@@ -88,31 +95,40 @@ window#waybar.hidden {
     padding: 0 8px;
     margin: 3px 2px;
     border-radius: 7px;
-    color: #838ba7;
+    color: #7e8190;
     background: transparent;
     transition: all 200ms ease;
 }
 
 #workspaces button:hover {
-    color: #eceff4;
-    background-color: rgba(186, 187, 241, 0.18);
+    color: #f0e6ec;
+    background-color: rgba(214, 184, 200, 0.18);
     box-shadow: none;
 }
 
 #workspaces button.active {
-    color: #1a1322;
-    background-color: #babbf1;
-    box-shadow: 0 0 6px 1px rgba(192, 169, 255, 0.7);
+    color: #141b28;
+    background-color: #d6b8c8;
+    box-shadow: 0 0 6px 1px rgba(247, 201, 204, 0.7);
+}
+
+/* Two monitors means one workspace is on-screen but unfocused — Waybar marks
+   that one .visible, never .active. Without this it rendered identically to an
+   empty workspace, so the second monitor's bar looked like nothing was open. */
+#workspaces button.visible:not(.active) {
+    color: #d6b8c8;
+    background-color: rgba(214, 184, 200, 0.16);
+    box-shadow: inset 0 0 0 1px rgba(214, 184, 200, 0.45);
 }
 
 #workspaces button.urgent {
-    color: #1a1322;
-    background-color: #f4b8e4;
+    color: #141b28;
+    background-color: #e3b5cc;
 }
 
 /* ---- left / center ---- */
 #window {
-    color: #b5bfe2;
+    color: #a9b8d4;
     font-style: italic;
 }
 
@@ -125,54 +141,55 @@ window#waybar.empty #window {
 }
 
 #clock {
-    color: #babbf1;
+    color: #d6b8c8;
     font-weight: bold;
 }
 
 /* ---- right-side accents ---- */
-#mpris        { color: #ca9ee6; }
-#cpu          { color: #8caaee; }
-#memory       { color: #85c1dc; }
-#temperature  { color: #81c8be; }
-#pulseaudio   { color: #babbf1; }
-#backlight    { color: #e5c890; }
-#network      { color: #8caaee; }
-#language     { color: #f4b8e4; }
-#idle_inhibitor { color: #a6d189; }
-#custom-power { color: #e78284; }
+#mpris        { color: #b9b3c4; }
+#cpu          { color: #8fa5c4; }
+#memory       { color: #8fb8c4; }
+#temperature  { color: #8fb3ac; }
+#pulseaudio   { color: #d6b8c8; }
+#backlight    { color: #e0b088; }
+#network      { color: #8fa5c4; }
+#language     { color: #e3b5cc; }
+#idle_inhibitor { color: #8fb3ac; }
+#custom-notification { color: #d6b8c8; }
+#custom-power { color: #e08a94; }
 
 #temperature.critical {
-    color: #e78284;
+    color: #e08a94;
 }
 
 #pulseaudio.muted {
-    color: #838ba7;
+    color: #7e8190;
 }
 
 #network.disconnected {
-    color: #e78284;
+    color: #e08a94;
 }
 
 #idle_inhibitor.activated {
-    color: #e5c890;
+    color: #e0b088;
 }
 
 /* ---- battery states ---- */
 #battery {
-    color: #a6d189;
+    color: #8fb3ac;
 }
 
 #battery.charging,
 #battery.plugged {
-    color: #a6d189;
+    color: #8fb3ac;
 }
 
 #battery.warning:not(.charging) {
-    color: #e5c890;
+    color: #e0b088;
 }
 
 #battery.critical:not(.charging) {
-    color: #e78284;
+    color: #e08a94;
     animation: blink-critical steps(2) 1s infinite alternate;
 }
 

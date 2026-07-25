@@ -1,0 +1,222 @@
+/*
+ * Kazuha Dusk — SwayNotificationCenter
+ *
+ * Deliberately the same idiom as ~/.config/waybar/style.css: a translucent
+ * navy capsule, a 1px rose border at 0.32, and the blush glow on hover. The
+ * blur comes from the swaync-blur layerrule in hyprland.conf.
+ *
+ *   surface rgba(20,27,40,.85)   accent #d6b8c8   fill #6b5a70
+ *   glow    #f7c9cc              text   #d6d2e0 / #f0e6ec / #7e8190
+ *   coral   #e08a94  (critical)
+ */
+
+* {
+    font-family: "Hack Nerd Font", "Symbols Nerd Font", sans-serif;
+    font-size: 13px;
+}
+
+/* the layer window itself must not paint, or the blur sits in a square */
+.blank-window,
+.floating-notifications.background,
+.control-center-list,
+.notification-group {
+    background: transparent;
+}
+
+/* ---- toast ---- */
+.notification-row {
+    outline: none;
+}
+
+.notification-row .notification-background {
+    background-color: rgba(20, 27, 40, 0.85);
+    border: 1px solid rgba(214, 184, 200, 0.32);
+    border-radius: 12px;
+    margin: 6px 8px;
+    padding: 0;
+    transition: background-color 200ms ease, box-shadow 200ms ease;
+}
+
+.notification-row .notification-background:hover {
+    background-color: rgba(107, 90, 112, 0.5);
+    box-shadow: 0 0 6px 1px rgba(247, 201, 204, 0.6);
+}
+
+.notification-row .notification-background .notification {
+    padding: 6px;
+    border-radius: 12px;
+    background: transparent;
+}
+
+.notification-content {
+    background: transparent;
+    padding: 6px;
+    border-radius: 10px;
+}
+
+.summary {
+    color: #f0e6ec;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.body {
+    color: #d6d2e0;
+}
+
+.time {
+    color: #7e8190;
+    font-size: 12px;
+    margin-right: 20px;
+}
+
+.body-image {
+    margin-top: 6px;
+    border-radius: 10px;
+}
+
+/* critical: the coral from Waybar's battery/temperature alarms */
+.notification-row .notification-background .notification.critical {
+    border-left: 3px solid #e08a94;
+}
+
+.critical .summary {
+    color: #e08a94;
+}
+
+/* ---- buttons on a toast ---- */
+.close-button {
+    background: transparent;
+    color: #7e8190;
+    padding: 0;
+    margin: 6px;
+    border-radius: 8px;
+    min-width: 22px;
+    min-height: 22px;
+    transition: background-color 200ms ease, color 200ms ease;
+}
+
+.close-button:hover {
+    background-color: rgba(224, 138, 148, 0.5);
+    color: #f0e6ec;
+}
+
+.notification-action,
+.notification-default-action {
+    background: transparent;
+    border: none;
+    color: #d6d2e0;
+}
+
+.notification-action {
+    border: 1px solid rgba(214, 184, 200, 0.32);
+    border-radius: 10px;
+    margin: 4px;
+    padding: 4px 10px;
+}
+
+.notification-action:hover {
+    background-color: rgba(107, 90, 112, 0.5);
+    color: #f0e6ec;
+}
+
+/* ---- control center ---- */
+.control-center {
+    background-color: rgba(20, 27, 40, 0.85);
+    border: 1px solid rgba(214, 184, 200, 0.32);
+    border-radius: 14px;
+    padding: 10px;
+    color: #d6d2e0;
+}
+
+.widget-title {
+    color: #d6b8c8;
+    font-size: 15px;
+    font-weight: bold;
+    margin: 6px 4px 10px 4px;
+}
+
+.widget-title > button {
+    background-color: rgba(29, 39, 57, 0.68);
+    border: 1px solid rgba(214, 184, 200, 0.32);
+    border-radius: 10px;
+    color: #d6d2e0;
+    font-size: 13px;
+    font-weight: normal;
+    padding: 4px 12px;
+    transition: background-color 200ms ease, box-shadow 200ms ease;
+}
+
+.widget-title > button:hover {
+    background-color: rgba(107, 90, 112, 0.5);
+    box-shadow: 0 0 6px 1px rgba(247, 201, 204, 0.6);
+    color: #f0e6ec;
+}
+
+.widget-dnd {
+    color: #d6d2e0;
+    font-size: 13px;
+    margin: 4px;
+}
+
+.widget-dnd > switch {
+    background-color: rgba(29, 39, 57, 0.8);
+    border: 1px solid rgba(214, 184, 200, 0.32);
+    border-radius: 12px;
+}
+
+.widget-dnd > switch:checked {
+    background-color: #d6b8c8;
+    border-color: #d6b8c8;
+}
+
+.widget-dnd > switch slider {
+    background-color: #7e8190;
+    border-radius: 12px;
+}
+
+.widget-dnd > switch:checked slider {
+    background-color: #141b28;
+}
+
+/* ---- mpris widget ---- */
+.widget-mpris {
+    color: #d6d2e0;
+    margin: 4px;
+}
+
+.widget-mpris-player {
+    background-color: rgba(29, 39, 57, 0.68);
+    border: 1px solid rgba(214, 184, 200, 0.32);
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.widget-mpris-title {
+    color: #f0e6ec;
+    font-weight: bold;
+}
+
+.widget-mpris-subtitle {
+    color: #7e8190;
+}
+
+.widget-mpris > box > button:hover {
+    background-color: rgba(107, 90, 112, 0.5);
+}
+
+/* ---- slim themed scrollbar, same as wofi ---- */
+scrollbar {
+    background: transparent;
+    border: none;
+}
+
+scrollbar slider {
+    background-color: rgba(214, 184, 200, 0.25);
+    border-radius: 10px;
+    min-width: 6px;
+}
+
+scrollbar slider:hover {
+    background-color: rgba(214, 184, 200, 0.45);
+}

@@ -1,0 +1,67 @@
+/*
+ * Kazuha Dusk — GTK3
+ *
+ * Adwaita-dark supplies the widget geometry; these overrides bend its palette
+ * toward the theme and add transparency at alpha 0.78 — the same level as
+ * kitty's background_opacity — so GTK windows read at the same depth as a
+ * terminal and get Hyprland's blur behind them.
+ *
+ * Only backgrounds carry alpha; text and icons stay opaque. Popovers, menus and
+ * tooltips stay near-opaque because they float above an already-translucent
+ * window, and two stacked translucent layers over this wallpaper is unreadable.
+ */
+
+@define-color theme_selected_bg_color #d6b8c8;
+@define-color theme_selected_fg_color #141b28;
+
+@define-color theme_bg_color          rgba(20, 27, 40, 0.78);
+@define-color theme_fg_color          #d6d2e0;
+
+@define-color theme_base_color        rgba(29, 39, 57, 0.78);
+@define-color theme_text_color        #d6d2e0;
+
+@define-color insensitive_bg_color    rgba(29, 39, 57, 0.78);
+@define-color insensitive_fg_color    #7e8190;
+
+@define-color borders                 rgba(214, 184, 200, 0.32);
+@define-color unfocused_borders       rgba(214, 184, 200, 0.32);
+
+@define-color warning_color           #e0b088;
+@define-color error_color             #e08a94;
+@define-color success_color           #8fb3ac;
+
+/* Adwaita paints its own opaque window background, which would sit on top of
+   the named color above — override it directly. */
+window,
+window.background,
+.background,
+dialog {
+    background-color: rgba(20, 27, 40, 0.78);
+}
+
+headerbar,
+.titlebar {
+    background-color: rgba(29, 39, 57, 0.78);
+    border-bottom: 1px solid rgba(214, 184, 200, 0.32);
+}
+
+/* let the window show through the scrolling areas instead of a second slab */
+treeview.view,
+textview,
+textview text,
+scrolledwindow,
+viewport,
+notebook,
+stack {
+    background-color: transparent;
+}
+
+/* floating layers stay readable */
+menu,
+.menu,
+popover,
+popover.background,
+tooltip,
+tooltip.background {
+    background-color: rgba(29, 39, 57, 0.96);
+}

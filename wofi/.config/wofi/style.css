@@ -1,30 +1,128 @@
-window {
-    background-color:rgba(17, 11, 27, 0.397);
-    border-radius: 12px;
-    padding: 10px;
+/*
+ * Kazuha Dusk — wofi launcher, "floating island"
+ *
+ * Palette mirrors ~/.config/waybar/style.css:
+ *   surface rgba(20,27,40,.85)   accent #d6b8c8   fill #6b5a70
+ *   glow    #f7c9cc              text   #d6d2e0 / #f0e6ec / #7e8190
+ *
+ * Widget tree (wofi(7)):
+ *   window#window > box#outer-box > entry#input
+ *                                 > scrolledwindow#scroll
+ *                                     > flowbox#inner-box
+ *                                         > flowboxchild#entry > #img + #text
+ */
+
+* {
+    font-family: "Hack Nerd Font", "Symbols Nerd Font", sans-serif;
+    font-size: 14px;
 }
 
+/* ---- the island ---- */
+#window {
+    background-color: rgba(20, 27, 40, 0.85);
+    border: 1px solid rgba(214, 184, 200, 0.32);
+    border-radius: 14px;
+    color: #d6d2e0;
+}
+
+#outer-box {
+    padding: 12px;
+}
+
+/* ---- search input: its own capsule, Waybar radius ---- */
 #input {
-    font-size: 16px;
-    color: white;
-    background-color:rgba(17, 11, 27, 0.397);
-    border-radius: 6px;
-    padding: 5px;
+    font-size: 15px;
+    color: #f0e6ec;
+    background-color: rgba(29, 39, 57, 0.68);
+    border: 1px solid rgba(214, 184, 200, 0.32);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    caret-color: #d6b8c8;
+    transition: border-color 200ms ease, box-shadow 200ms ease;
 }
-
 
 #input:focus {
-    border: 2px solid #a295eb; /* change corner color on focus */
-    box-shadow: 0 0 5px 2px #c0a9ff;
+    border: 1px solid #d6b8c8;
+    box-shadow: 0 0 6px 1px rgba(247, 201, 204, 0.55);
+    outline: none;
+}
+
+#input selection {
+    background-color: #6b5a70;
+    color: #f0e6ec;
+}
+
+/* the GtkSearchEntry magnifier is a symbolic icon — keep it from inheriting
+   #f0e6ec and out-shouting the placeholder */
+#input image {
+    color: #7e8190;
+}
+
+/* ---- results ---- */
+#scroll {
+    padding: 0 2px;   /* keeps the row glow from being clipped */
+}
+
+/* Adwaita paints dashed "more content" gradients at the scroll edges */
+#scroll undershoot.top,
+#scroll undershoot.bottom {
+    background-image: none;
+}
+
+#scroll viewport {
+    background-color: transparent;
+}
+
+#inner-box {
+    background-color: transparent;
 }
 
 #entry {
-    padding: 10px;
-    font-size: 14px;
-    color: #eee;
+    padding: 7px 10px;
+    margin: 2px 0;
+    border-radius: 10px;
+    background-color: transparent;
+    transition: background-color 200ms ease, box-shadow 200ms ease;
 }
 
+#entry:hover {
+    background-color: rgba(214, 184, 200, 0.12);
+}
+
+/* signature lavender fill + glow, same idiom as the active Waybar workspace */
 #entry:selected {
-    background-color: #835eac;
-    color: white;
+    background-color: rgba(107, 90, 112, 0.55);
+    box-shadow: 0 0 8px 1px rgba(247, 201, 204, 0.55);
+}
+
+/* the gap lives on the icon, not the label: entries whose .desktop resolves
+   no icon would otherwise be indented past the icon column */
+#img {
+    margin-right: 10px;
+}
+
+#text {
+    color: #d6d2e0;
+}
+
+#entry:selected #text {
+    color: #f0e6ec;
+    font-weight: bold;
+}
+
+/* ---- slim themed scrollbar ---- */
+#scroll scrollbar {
+    background-color: transparent;
+    border: none;   /* Adwaita puts a 1px trough border here */
+}
+
+#scroll scrollbar slider {
+    background-color: rgba(214, 184, 200, 0.25);
+    border-radius: 10px;
+    min-width: 6px;
+}
+
+#scroll scrollbar slider:hover {
+    background-color: rgba(214, 184, 200, 0.45);
 }

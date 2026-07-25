@@ -1,0 +1,82 @@
+/*
+ * Kazuha Dusk — wofi power menu (Waybar 󰐥 → waybar/scripts/powermenu.sh)
+ * Same palette as style.css, proportioned for a 4-item icon list.
+ */
+
+* {
+    font-family: "Hack Nerd Font", "Symbols Nerd Font", sans-serif;
+    font-size: 14px;
+}
+
+#window {
+    background-color: rgba(20, 27, 40, 0.85);
+    border: 1px solid rgba(214, 184, 200, 0.32);
+    border-radius: 14px;
+    color: #d6d2e0;
+}
+
+#outer-box {
+    padding: 10px;
+}
+
+/* the search entry doubles as the "Power" title bar */
+#input {
+    font-size: 13px;
+    font-weight: bold;
+    color: #d6b8c8;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(214, 184, 200, 0.32);
+    border-radius: 0;
+    padding: 2px 8px 8px 8px;
+    margin-bottom: 8px;
+    caret-color: #d6b8c8;
+    box-shadow: none;
+    outline: none;
+}
+
+#input:focus {
+    border: none;
+    border-bottom: 1px solid rgba(214, 184, 200, 0.32);
+    box-shadow: none;
+    outline: none;
+}
+
+#input selection {
+    background-color: #6b5a70;
+    color: #f0e6ec;
+}
+
+#scroll {
+    padding: 0 2px;
+}
+
+#inner-box {
+    background-color: transparent;
+}
+
+#entry {
+    padding: 10px 14px;
+    margin: 2px 0;
+    border-radius: 10px;
+    background-color: transparent;
+    transition: background-color 200ms ease, box-shadow 200ms ease;
+}
+
+#entry:hover {
+    background-color: rgba(214, 184, 200, 0.12);
+}
+
+#entry:selected {
+    background-color: rgba(107, 90, 112, 0.55);
+    box-shadow: 0 0 8px 1px rgba(247, 201, 204, 0.55);
+}
+
+#text {
+    color: #d6d2e0;
+}
+
+#entry:selected #text {
+    color: #f0e6ec;
+    font-weight: bold;
+}

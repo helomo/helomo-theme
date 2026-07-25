@@ -1,0 +1,92 @@
+/*
+ * Kazuha Dusk — GTK4 / libadwaita
+ *
+ * libadwaita ignores gtk-theme-name, so the palette has to be pushed in through
+ * these named colors. Same values as waybar/wofi/kitty.
+ *
+ * Transparency: the surface colors carry alpha 0.78, matching kitty's
+ * background_opacity, so GTK windows sit at the same depth as a terminal and
+ * Hyprland's blur (decoration:blur) frosts what's behind them. Only the
+ * *background* is translucent — labels, icons and entries stay fully opaque,
+ * which is why this is done in CSS rather than with a Hyprland opacity rule
+ * (that would dim the text too).
+ *
+ * Popovers, menus and dialogs deliberately stay near-opaque (0.96): they float
+ * *above* an already-translucent window, and stacking two translucent layers
+ * over the wallpaper makes text unreadable.
+ */
+
+@define-color accent_color        #d6b8c8;
+@define-color accent_bg_color     #d6b8c8;
+@define-color accent_fg_color     #141b28;
+
+/* --- translucent surfaces (alpha 0.78 == kitty) --- */
+@define-color window_bg_color     rgba(20, 27, 40, 0.78);
+@define-color window_fg_color     #d6d2e0;
+
+@define-color view_bg_color       rgba(29, 39, 57, 0.78);
+@define-color view_fg_color       #d6d2e0;
+
+@define-color headerbar_bg_color  rgba(29, 39, 57, 0.78);
+@define-color headerbar_fg_color  #d6d2e0;
+@define-color headerbar_border_color rgba(214, 184, 200, 0.32);
+@define-color headerbar_backdrop_color rgba(20, 27, 40, 0.78);
+
+@define-color sidebar_bg_color    rgba(29, 39, 57, 0.78);
+@define-color sidebar_fg_color    #d6d2e0;
+@define-color sidebar_border_color rgba(214, 184, 200, 0.32);
+@define-color sidebar_backdrop_color rgba(20, 27, 40, 0.78);
+
+@define-color card_bg_color       rgba(29, 39, 57, 0.78);
+@define-color card_fg_color       #d6d2e0;
+
+/* --- floating layers: keep these readable --- */
+@define-color popover_bg_color    rgba(29, 39, 57, 0.96);
+@define-color popover_fg_color    #d6d2e0;
+
+@define-color dialog_bg_color     rgba(20, 27, 40, 0.96);
+@define-color dialog_fg_color     #d6d2e0;
+
+@define-color destructive_color   #e08a94;
+@define-color destructive_bg_color #e08a94;
+@define-color destructive_fg_color #141b28;
+
+@define-color success_color       #8fb3ac;
+@define-color warning_color       #e0b088;
+@define-color error_color         #e08a94;
+
+@define-color borders             rgba(214, 184, 200, 0.32);
+
+/* libadwaita paints an opaque `.background` beneath the window in some apps —
+   without this the named color above gets covered up and nothing looks
+   transparent. */
+window,
+window.background,
+.background {
+    background-color: rgba(20, 27, 40, 0.78);
+}
+
+headerbar,
+headerbar.titlebar {
+    background-color: rgba(29, 39, 57, 0.78);
+    border-bottom: 1px solid rgba(214, 184, 200, 0.32);
+}
+
+/* text views / lists sit on the window, so let the window show through */
+listview,
+listview > row,
+.view,
+textview,
+textview text,
+scrolledwindow {
+    background-color: transparent;
+}
+
+popover > contents,
+popover > arrow,
+menu,
+.menu {
+    background-color: rgba(29, 39, 57, 0.96);
+}
+
+

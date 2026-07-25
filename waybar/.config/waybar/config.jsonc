@@ -1,6 +1,6 @@
 // -*- mode: jsonc -*-
-// Hyprland-native "floating islands" bar — matches the helomo theme
-// (lavender #babbf1 accent, dark-purple translucent capsules, Hack Nerd Font).
+// Hyprland-native "floating islands" bar — matches the Kazuha Dusk theme
+// (dusty-rose #d6b8c8 accent, deep-navy translucent capsules, Hack Nerd Font).
 {
     "layer": "top",
     "position": "top",
@@ -29,6 +29,7 @@
         "hyprland/language",
         "idle_inhibitor",
         "tray",
+        "custom/notification",
         "custom/power"
     ],
 
@@ -53,10 +54,10 @@
         "calendar": {
             "mode": "month",
             "format": {
-                "months":  "<span color='#babbf1'><b>{}</b></span>",
-                "today":   "<span color='#f4b8e4'><b>{}</b></span>",
-                "days":    "<span color='#c6d0f5'>{}</span>",
-                "weekdays": "<span color='#8caaee'><b>{}</b></span>"
+                "months":  "<span color='#d6b8c8'><b>{}</b></span>",
+                "today":   "<span color='#f7c9cc'><b>{}</b></span>",
+                "days":    "<span color='#d6d2e0'>{}</span>",
+                "weekdays": "<span color='#8fa5c4'><b>{}</b></span>"
             }
         }
     },
@@ -168,6 +169,30 @@
     "tray": {
         "icon-size": 16,
         "spacing": 8
+    },
+
+    // swaync bell. `-swb` streams the unread count as JSON on the subscribe socket,
+    // so the capsule updates live instead of polling. Left click toggles the control
+    // center, right click toggles do-not-disturb.
+    "custom/notification": {
+        "tooltip": false,
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "<span foreground='#e08a94'><sup></sup></span>󰂚",
+            "none": "󰂚",
+            "dnd-notification": "<span foreground='#e08a94'><sup></sup></span>󰂛",
+            "dnd-none": "󰂛",
+            "inhibited-notification": "<span foreground='#e08a94'><sup></sup></span>󰂚",
+            "inhibited-none": "󰂚",
+            "dnd-inhibited-notification": "<span foreground='#e08a94'><sup></sup></span>󰂛",
+            "dnd-inhibited-none": "󰂛"
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
     },
 
     "custom/power": {
