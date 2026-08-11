@@ -13,7 +13,7 @@ set -euo pipefail
 
 # bare label  ->  action
 declare -A actions=(
-    ["Lock"]="hyprlock"
+    ["Lock"]="$HOME/.config/hypr/scripts/lock.sh"
     ["Logout"]="hyprctl dispatch exit"
     ["Reboot"]="systemctl reboot"
     ["Shutdown"]="systemctl poweroff"

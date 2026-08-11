@@ -92,6 +92,24 @@ terminal:
 
 ![VS Code](docs/screenshots/vscode.png)
 
+**Lock screen** — hyprlock, driven by the same `colors.conf`. Two extra variables live
+there for it: `$cLayout` (pink) for the keyboard-layout readout and `$cWarn` (coral)
+for Caps/Num Lock and failed attempts.
+
+Locking always goes through `hypr/.config/hypr/scripts/lock.sh` — the SUPER+L bind,
+hypridle's timeout and the Waybar power menu all call it, never `hyprlock` directly.
+The wrapper runs `hyprctl switchxkblayout all 0` first. With `kb_layout = us,ara` the
+lock screen would otherwise inherit whatever group was active, and since hyprlock holds
+the session-lock keyboard grab, SUPER+SPACE can't reach Hyprland to switch it back —
+an Arabic group at lock time means an untypeable password. The layout is mirrored under
+the input field with the same `󰌌` glyph Waybar uses, so it's always visible.
+
+Two other lock-screen details worth knowing: `fade_on_empty = false`, because hyprlock
+otherwise fades an empty input field out after two seconds and leaves nothing on screen
+to type into; and the wallpaper is dimmed harder here (`brightness 0.55`, three blur
+passes) than anywhere else, since kazuha.jpg's sky is bright enough to swallow rose
+text at the wallpaper's normal exposure.
+
 ### Transparency
 
 kazuha.jpg has a very bright sky, so surfaces need more opacity than a dark wallpaper
